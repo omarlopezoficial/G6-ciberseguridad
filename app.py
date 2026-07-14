@@ -73,6 +73,16 @@ def bootstrap_db():
 # Rutas de autenticación
 # ------------------------------------------------------------------
 
+@app.route("/")
+def index():
+    """
+    GET /
+    Landing page del proyecto. No requiere sesión activa.
+    Muestra el contexto del laboratorio y los enlaces a las vistas vulnerables.
+    """
+    return render_template("index.html")
+
+
 @app.route("/login", methods=["GET"])
 def login_get():
     """

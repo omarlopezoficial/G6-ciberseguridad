@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Med-Core App — Laboratorio de Ciberseguridad G6</title>
+    <!-- Landing del proyecto — enlaces a las vistas vulnerables y contexto del lab -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        /* Encabezado */
+        .page-header {
+            background: #1a1a2e;
+            color: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 1.6rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .page-header p {
+            font-size: 0.9rem;
+            color: #aab4c8;
+            line-height: 1.5;
+        }
+
+        .tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tag {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            padding: 0.25rem 0.65rem;
+            border-radius: 4px;
+            font-size: 0.78rem;
+        }
+
+        /* Sección de vulnerabilidades */
+        h2 {
+            font-size: 1.1rem;
+            color: #1a1a2e;
+            margin-bottom: 1rem;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .vuln-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .vuln-card-header {
+            background: #1a1a2e;
+            color: #fff;
+            padding: 1rem 1.25rem;
+        }
+
+        .vuln-card-header .owasp-id {
+            font-size: 0.75rem;
+            color: #aab4c8;
+            margin-bottom: 0.2rem;
+        }
+
+        .vuln-card-header h3 {
+            font-size: 1rem;
+        }
+
+        .vuln-card-body {
+            padding: 1.25rem;
+        }
+
+        .vuln-card-body p {
+            font-size: 0.88rem;
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .link-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .link-list a {
+            display: block;
+            padding: 0.55rem 0.85rem;
+            background: #f5f7fa;
+            border: 1px solid #e0e4ee;
+            border-radius: 6px;
+            color: #4a6fa5;
+            text-decoration: none;
+            font-size: 0.88rem;
+            transition: background 0.15s;
+        }
+
+        .link-list a:hover {
+            background: #e8f0fe;
+        }
+
+        .link-list .badge-endpoint {
+            float: right;
+            font-size: 0.7rem;
+            background: #e8f0fe;
+            color: #1a56db;
+            padding: 0.15rem 0.45rem;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+
+        /* Tabla del equipo */
+        .team-section {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .team-section-header {
+            background: #1a1a2e;
+            color: #fff;
+            padding: 0.85rem 1.25rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f0f4ff;
+        }
+
+        th {
+            padding: 0.65rem 1rem;
+            text-align: left;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 0.65rem 1rem;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9rem;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: #f0f4ff;
+        }
+
+        /* Entorno */
+        .env-section {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .env-section-header {
+            background: #1a1a2e;
+            color: #fff;
+            padding: 0.85rem 1.25rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .env-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            padding: 1.25rem;
+        }
+
+        .env-item label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #888;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .env-item span {
+            font-size: 0.9rem;
+            color: #1a1a2e;
+            font-family: monospace;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #e8f0fe;
+            color: #1a56db;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- Encabezado del proyecto -->
+        <div class="page-header">
+            <h1>Med-Core App — Laboratorio de Ciberseguridad</h1>
+            <p>
+                Evaluación Ofensiva y Remediación en Plataformas de Salud Web.<br>
+                Caso práctico de explotación de vulnerabilidades OWASP A05 y A10 — UCAB 2025/2026.
+            </p>
+            <div class="tag-row">
+                <span class="tag">Flask + PostgreSQL</span>
+                <span class="tag">Apache Reverse Proxy</span>
+                <span class="tag">VirtualBox</span>
+                <span class="tag">Kali Linux 192.168.100.10</span>
+                <span class="tag">Ubuntu Server 192.168.100.20</span>
+                <span class="tag">Grupo 6</span>
+            </div>
+        </div>
+
+        <!-- Vulnerabilidades -->
+        <h2>Vulnerabilidades Implementadas</h2>
+        <div class="cards-grid">
+
+            <!-- A05 -->
+            <div class="vuln-card">
+                <div class="vuln-card-header">
+                    <div class="owasp-id">OWASP Top 10:2025</div>
+                    <h3>A05 — Inyección SQL</h3>
+                </div>
+                <div class="vuln-card-body">
+                    <p>
+                        El parámetro <code>q</code> del endpoint de búsqueda se concatena
+                        directamente en la consulta SQL sin parametrizar, permitiendo
+                        extraer datos de la base de datos med_core_db.
+                    </p>
+                    <ul class="link-list">
+                        <li>
+                            <a href="/login">
+                                Iniciar sesión
+                                <span class="badge-endpoint">POST /login</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/search">
+                                Búsqueda de pacientes
+                                <span class="badge-endpoint">GET /search</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A10 -->
+            <div class="vuln-card">
+                <div class="vuln-card-header">
+                    <div class="owasp-id">OWASP Top 10:2025</div>
+                    <h3>A10 — Manejo de Excepciones</h3>
+                </div>
+                <div class="vuln-card-body">
+                    <p>
+                        El endpoint <code>/patients/&lt;id&gt;</code> no valida el tipo de dato
+                        ni usa bloques try-except. Con <code>debug=True</code>, cualquier
+                        excepción expone el stack trace completo al cliente (CWE-209).
+                    </p>
+                    <ul class="link-list">
+                        <li>
+                            <a href="/patients/0">
+                                Ver perfil válido
+                                <span class="badge-endpoint">GET /patients/0</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/patients/">
+                                Payload: ruta sin parámetro (404)
+                                <span class="badge-endpoint">GET /patients/</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/patients/abc">
+                                Payload: texto no numérico
+                                <span class="badge-endpoint">GET /patients/abc</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/patients/9999">
+                                Payload: índice fuera de rango
+                                <span class="badge-endpoint">GET /patients/9999</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/patients/!!!!">
+                                Payload: caracteres especiales
+                                <span class="badge-endpoint">GET /patients/!!!!</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/patients/%24%25%23%40">
+                                Payload: URL-encoded
+                                <span class="badge-endpoint">GET /patients/%24%25%23%40</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/patients/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA">
+                                Payload: cadena extremadamente larga
+                                <span class="badge-endpoint">GET /patients/AAA...AAA</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Equipo -->
+        <div class="team-section">
+            <div class="team-section-header">Integrantes — Grupo 6</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Cédula</th>
+                        <th>Rol en el proyecto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Omar López</td>
+                        <td>20.896.095</td>
+                        <td>Introducción y coordinación general</td>
+                    </tr>
+                    <tr>
+                        <td>José Bozzelli</td>
+                        <td>30.142.780</td>
+                        <td>Backend — A05 SQL Injection</td>
+                    </tr>
+                    <tr>
+                        <td>Edwin Li</td>
+                        <td>29.845.709</td>
+                        <td>Frontend y documentación — A05 / Infraestructura</td>
+                    </tr>
+                    <tr>
+                        <td>David Crespo</td>
+                        <td>30.497.143</td>
+                        <td>Backend — A10 Manejo de Excepciones</td>
+                    </tr>
+                    <tr>
+                        <td>Andrés Martínez</td>
+                        <td>29.686.554</td>
+                        <td>Frontend y documentación — A10</td>
+                    </tr>
+                    <tr>
+                        <td>Diego Flores</td>
+                        <td>31.290.731</td>
+                        <td>Infraestructura y configuración</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Entorno -->
+        <div class="env-section">
+            <div class="env-section-header">Entorno del Laboratorio</div>
+            <div class="env-grid">
+                <div class="env-item">
+                    <label>VM Atacante</label>
+                    <span>Kali Linux &nbsp;<span class="badge">192.168.100.10</span></span>
+                </div>
+                <div class="env-item">
+                    <label>VM Víctima</label>
+                    <span>Ubuntu Server &nbsp;<span class="badge">192.168.100.20</span></span>
+                </div>
+                <div class="env-item">
+                    <label>Red interna</label>
+                    <span>192.168.100.0/24 (aislada)</span>
+                </div>
+                <div class="env-item">
+                    <label>Hipervisor</label>
+                    <span>VirtualBox 7.x</span>
+                </div>
+                <div class="env-item">
+                    <label>Rama vulnerable</label>
+                    <span>version-vulnerable</span>
+                </div>
+                <div class="env-item">
+                    <label>Rama sanitizada</label>
+                    <span>version-sanitizada</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
