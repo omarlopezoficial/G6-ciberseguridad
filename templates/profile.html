@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Paciente - Med-Core App</title>
+    <!-- Vista de perfil — renderiza datos del paciente desde app.py (endpoint /patients/<id>) -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: #1a1a2e;
+            margin-bottom: 0.25rem;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            color: #4a6fa5;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Tarjeta principal del perfil */
+        .profile-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-header {
+            background: #1a1a2e;
+            color: #fff;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #4a6fa5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .profile-header-info h2 {
+            font-size: 1.3rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .profile-header-info span {
+            font-size: 0.85rem;
+            color: #aab4c8;
+        }
+
+        /* Grid de campos */
+        .profile-body {
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .field.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .field label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #888;
+        }
+
+        .field span {
+            font-size: 0.95rem;
+            color: #1a1a2e;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+        .badge-blood {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-allergy {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-endpoint {
+            background: #e8f0fe;
+            color: #1a56db;
+            margin-top: 0.5rem;
+        }
+
+        /* Separador */
+        .profile-body hr {
+            grid-column: 1 / -1;
+            border: none;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <h1>Perfil de Paciente</h1>
+        <p class="subtitle">Sistema de registros médicos — Med-Core App</p>
+
+        <a href="/search" class="back-link">← Volver a búsqueda</a>
+
+        <!-- PATIENTS_DATA es una lista; int(id) sin try-except → ValueError o IndexError con debug=True -->
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="avatar">{{ patient.full_name[0] }}</div>
+                <div class="profile-header-info">
+                    <h2>{{ patient.full_name }}</h2>
+                    <span>ID: {{ patient.id }} &nbsp;|&nbsp; {{ patient.document_id }}</span>
+                </div>
+            </div>
+
+            <div class="profile-body">
+
+                <div class="field">
+                    <label>Correo electrónico</label>
+                    <span>{{ patient.email }}</span>
+                </div>
+
+                <div class="field">
+                    <label>Teléfono</label>
+                    <span>{{ patient.phone }}</span>
+                </div>
+
+                <div class="field">
+                    <label>Fecha de nacimiento</label>
+                    <span>{{ patient.birth_date }}</span>
+                </div>
+
+                <div class="field">
+                    <label>Tipo de sangre</label>
+                    <span><span class="badge badge-blood">{{ patient.blood_type }}</span></span>
+                </div>
+
+                <hr>
+
+                <div class="field full-width">
+                    <label>Diagnóstico</label>
+                    <span>{{ patient.diagnosis }}</span>
+                </div>
+
+                <div class="field full-width">
+                    <label>Alergias</label>
+                    <span><span class="badge badge-allergy">{{ patient.allergies }}</span></span>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="badge badge-endpoint">endpoint: GET /patients/{{ patient.id }}</div>
+
+    </div>
+</body>
+</html>
