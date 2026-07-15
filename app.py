@@ -268,7 +268,7 @@ def patients_search():
     if not q:
         return {"error": "Parámetro 'q' requerido"}, 400
 
-     like_pattern = f"%{q}%"
+    like_pattern = f"%{q}%"
     sql = (
         "SELECT id, full_name, document_id, email, phone, birth_date "
         "FROM patients WHERE full_name ILIKE %s"
