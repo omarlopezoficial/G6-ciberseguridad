@@ -255,10 +255,10 @@ def patients_search():
     VULNERABLE a SQL Injection: el parámetro 'q' se concatena
     directamente en la consulta SQL (sin parámetros ni sanitización).
 
-    Consulta original:
+     Consulta parametrizada (protegido contra SQL Injection):
         SELECT id, full_name, document_id, email, phone, birth_date
         FROM patients
-        WHERE full_name LIKE '%<q>%';
+        WHERE full_name ILIKE '%<q>%';
     """
     if "usuario_id" not in session:
         return {"error": "No autorizado"}, 401
@@ -268,17 +268,16 @@ def patients_search():
     if not q:
         return {"error": "Parámetro 'q' requerido"}, 400
 
-    # VULNERABILIDAD INTENCIONAL: concatenación directa del input
-    # Permite inyección SQL: ', OR, UNION, ORDER BY, etc.
+     like_pattern = f"%{q}%"
     sql = (
         "SELECT id, full_name, document_id, email, phone, birth_date "
-        f"FROM patients WHERE full_name LIKE '%{q}%'"
+        "FROM patients WHERE full_name ILIKE %s"
     )
 
     try:
         with get_db_connection() as conn:
             with conn.cursor() as cur:
-                cur.execute(sql)
+                cur.execute(sql, (like_pattern,))
                 filas = cur.fetchall()
     except Exception as error:
         print(f"[app] Error en /patients/search: {error}")
