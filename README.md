@@ -171,7 +171,7 @@ http://localhost:5000
 | `/login` | POST | Procesar login | No |
 | `/dashboard` | GET | Panel principal | Si |
 | `/search` | GET | Pagina de busqueda | Si |
-| `/patients/search?q=` | GET | API busqueda (SQLi intencional) | Si |
+| `/patients/search?q=` | GET | API busqueda (remediada) | Si |
 | `/patients/<id>` | GET | Perfil de paciente | No |
 | `/logout` | GET | Cerrar sesion | Si |
 
@@ -230,6 +230,24 @@ def agregar_cabeceras_seguridad(response):
 
 - `X-Content-Type-Options: nosniff` previene MIME sniffing
 - `Server: MedCore-Server` enmascara Werkzeug/Python (anti-fingerprinting)
+
+---
+
+### Remediación A05:2025 — SQL Injection
+
+Se corrigió la vulnerabilidad de inyección SQL en `/patients/search` reemplazando la concatenación directa de strings por consultas parametrizadas con psycopg2:
+
+```python
+# ANTES (vulnerable)
+sql = f"SELECT ... FROM patients WHERE full_name LIKE '%{q}%'"
+cur.execute(sql)
+
+# DESPUÉS (remediado)
+like_pattern = f"%{q}%"
+sql = "SELECT ... FROM patients WHERE full_name ILIKE %s"
+cur.execute(sql, (like_pattern,))
+
+Esto convierte cualquier payload malicioso (' OR '1'='1, UNION SELECT, etc.) en texto de búsqueda literal, imposibilitando la inyección SQL.
 
 ---
 
